@@ -1,0 +1,13 @@
+[{
+    "codigo": "123456",
+    "nome": "Camiseta",
+    "marca": "Renner",
+    "preco": 12.01,
+    "quantidade": 6
+},{
+    "codigo": "001122",
+    "nome": "Calça",
+    "marca": "Levis",
+    "preco": 1023.40,
+    "quantidade": 7
+}]
