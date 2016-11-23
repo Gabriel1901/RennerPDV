@@ -18,8 +18,32 @@ $(document).ready(function(){
     });
  
     $('#bt-cadastrar').click(function(){
-
-        $('#form-produto').submit();        
+    
+        var temErro = false;
+        
+        $('input,select').each(function(idx, elem){
+            var valor = $(elem).val();
+            $(elem).parents('.form-group').removeClass('has-error');
+            
+            if (valor == "")
+            {
+                temErro = true;
+                $(elem).parents('.form-group').addClass('has-error');
+            }
+            
+        });
+        
+        if (temErro == true)
+        {
+            //tem problema
+        }else{
+            $('#form-produto').submit();
+            
+            $('input,select').each(function(idx, elem){
+                $(elem).val("");
+            });
+        }
+        
     });
     
     $('#form-produto').submit(function(evento){
@@ -90,15 +114,52 @@ function carregaRegistros()
                         +'<td><button type="button" class="bt-deletar btn btn-danger" >'
                         +'<span class="glyphicon glyphicon-trash"></span>'
                         +'</button></td>'
+                        
+                        +'<td><button type="button" class="bt-editar btn btn-success" >'
+                        +'<span class="glyphicon glyphicon-edit"></span>'
+                        +'</button></td>'
                     +"</tr>";
             $('#lista-produtos tbody').append(tr);
         });
         
         $('#quantidade-total').html(total);
         
+        $('.bt-editar').click(function(){
+            var tr = $(this).parent().parent();
+            var id = tr.attr('obj-id');
+            var dados = {
+                id: id
+            };
+            
+            $.getJSON('/model/ler-produto.php', dados, function(retorno){
+                
+            $('#codigo').val(retorno.codigo);
+            $('#nome').val(retorno.nome);
+            
+            $('#cadastro-produto').modal('show');
+                
+            });
+            
+        });
+        
         $('.bt-deletar').click(function(){
             var tr = $(this).parent().parent();
             var id = tr.attr('obj-id');
+            var dados = {
+                id: id
+            };
+            
+            $.getJSON('/model/deletar.php', dados, function(retorno){
+                
+                if (retorno.status == "ok")
+                {
+                    
+                    carregaRegistros();
+                    $('#alert-produto').removeClass('hide');
+                    $('#alert-produto').html('O Produto foi removido com sucesso');
+                }
+                   
+            });
             
         });
 
